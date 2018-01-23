@@ -678,7 +678,9 @@ and dependencies (minified).
 							}
 						};
 
-						scrollToFn(methodOptions.onCompleteCallback);
+						if (methodOptions.timeout === 0 && typeof methodOptions.onCompleteCallback === 'function') {
+							scrollToFn(methodOptions.onCompleteCallback);
+						}
 						
 						setTimeout(function(){ 
 							/* do the scrolling */
