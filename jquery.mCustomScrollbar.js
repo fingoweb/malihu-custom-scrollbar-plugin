@@ -661,19 +661,28 @@ and dependencies (minified).
 						}
 						
 						methodOptions.dur=_isTabHidden() ? 0 : dur; //skip animations if browser tab is hidden
-						
-						setTimeout(function(){ 
-							/* do the scrolling */
+
+						var scrollToFn = function (onCompleteCallback) {
+							var completeCallback = typeof onCompleteCallback === 'function' ? onCompleteCallback : function () {};
 							if(to[0]!==null && typeof to[0]!=="undefined" && o.axis!=="x" && d.overflowed[0]){ /* scroll y */
 								methodOptions.dir="y";
 								methodOptions.overwrite="all";
 								_scrollTo($this,to[0].toString(),methodOptions);
+								completeCallback();
 							}
 							if(to[1]!==null && typeof to[1]!=="undefined" && o.axis!=="y" && d.overflowed[1]){ /* scroll x */
 								methodOptions.dir="x";
 								methodOptions.overwrite="none";
 								_scrollTo($this,to[1].toString(),methodOptions);
+								completeCallback();
 							}
+						};
+
+						scrollToFn(methodOptions.onCompleteCallback);
+						
+						setTimeout(function(){ 
+							/* do the scrolling */
+							scrollToFn();
 						},methodOptions.timeout);
 						
 					}
